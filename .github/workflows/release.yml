@@ -36,11 +36,11 @@ jobs:
         powershell -Command "if (!(Test-Path dist)) { mkdir dist }"
         move .\dist\main.exe dist\py-scrm.exe
 
-    # - name: Upload artifact
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: py-scrm
-    #     path: dist/py-scrm.exe
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: py-scrm
+        path: dist/py-scrm.exe
 
   # release:
   #   needs: build
