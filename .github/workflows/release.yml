@@ -1,0 +1,71 @@
+name: Build and Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Install PyInstaller
+      run: pip install pyinstaller
+
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --noconsole main.py
+
+    - name: Archive build artifact
+      run: |
+        mkdir dist
+        move .\dist\main.exe dist\py-scrm.exe
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: py-scrm
+        path: dist/py-scrm.exe
+
+  # release:
+  #   needs: build
+  #   runs-on: windows-latest
+
+  #   steps:
+  #   - name: Download artifact
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       name: py-scrm
+
+  #   - name: Create GitHub Release
+  #     uses: actions/create-release@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       tag_name: ${{ github.ref_name }}
+  #       release_name: Release ${{ github.ref_name }}
+  #       draft: false
+  #       prerelease: false
+
+  #   - name: Upload Release Asset
+  #     uses: actions/upload-release-asset@v1
+  #     with:
+  #       upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #       asset_path: dist/py-scrm.exe
+  #       asset_name: py-scrm.exe
+  #       asset_content_type: application/octet-stream
