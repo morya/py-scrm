@@ -33,7 +33,7 @@ jobs:
 
     - name: Archive build artifact
       run: |
-        if not exist dist mkdir dist
+        mkdir -p dist
         move .\dist\main.exe dist\py-scrm.exe
 
     # - name: Upload artifact
