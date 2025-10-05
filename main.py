@@ -2,12 +2,10 @@
 
 import sys
 import os
-
-import logging
-
 import threading
 import queue
 
+from loguru import logger
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QPushButton
 
@@ -15,7 +13,7 @@ from cfg import cfgLogging
 
 
 def job(evt: threading.Event):
-    logging.info("Thread job started")
+    logger.info("Thread job started")
 
     i = 0
 
@@ -23,8 +21,8 @@ def job(evt: threading.Event):
         i += 1
         if i > 1000:
             i = 0
-        logging.info(f"Thread job running {i}")
-    logging.info("Thread job finished")
+        logger.info(f"Thread job running {i}")
+    logger.info("Thread job finished")
 
 
 def main():
