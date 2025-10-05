@@ -14,7 +14,7 @@ This is a Python GUI application that manages screen-capture-recorder registry i
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Install all dependencies (including dev dependencies like pyinstaller)
-uv sync --dev
+uv sync --group dev
 
 # Install only production dependencies
 uv sync

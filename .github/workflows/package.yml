@@ -29,7 +29,7 @@ jobs:
       run: uv python install 3.10
 
     - name: Install dependencies
-      run: uv sync --dev
+      run: uv sync --group dev
 
     - name: Build executable
       run: |

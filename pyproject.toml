@@ -7,17 +7,9 @@ requires-python = ">=3.10"
 dependencies = [
     "pyside6",
     "loguru",
-    "hatchling",
 ]
 
-[tool.hatch.build.targets.wheel]
-universal = true
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pyinstaller",
 ]
