@@ -1,0 +1,19 @@
+[project]
+name = "py-scrm"
+version = "0.1.0"
+description = "操作并管理 screen-capture-recorder 工具的注册表信息"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyside6",
+    "loguru",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "pyinstaller",
+]

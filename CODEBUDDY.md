@@ -4,29 +4,36 @@ This file contains essential information for Terminal Assistant Agent instances 
 
 ## Project Overview
 
-This is a Python GUI application that manages screen-capture-recorder registry information. The project uses PySide6 for the GUI framework, loguru for logging, and is designed to be packaged as a Windows executable.
+This is a Python GUI application that manages screen-capture-recorder registry information. The project uses PySide6 for the GUI framework, loguru for logging, uv for dependency management, and is designed to be packaged as a Windows executable.
 
 ## Development Commands
 
 ### Dependencies
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# For building executable
-pip install pyinstaller
+# Install all dependencies (including dev dependencies like pyinstaller)
+uv sync --dev
+
+# Install only production dependencies
+uv sync
 ```
 
 ### Running the Application
 ```bash
 # Run the main application
+uv run python main.py
+
+# Or activate the virtual environment and run directly
+uv shell
 python main.py
 ```
 
 ### Building
 ```bash
 # Build Windows executable (as done in CI)
-pyinstaller --onefile --noconsole main.py
+uv run pyinstaller --onefile --noconsole main.py
 
 # The executable will be created in dist/main.exe
 # Rename to py-scrm.exe for distribution
@@ -51,15 +58,17 @@ The application follows a simple architecture:
 - Uses threading.Event for clean thread shutdown coordination
 - Logging configuration using loguru is centralized in cfg.py and initialized before main application
 - GUI uses lambda functions for event handling
-- Application designed for Windows deployment (GitHub Actions uses windows-2019)
+- Application designed for Windows deployment (GitHub Actions uses windows-2022)
+- Uses uv for fast and reliable dependency management
 
 ## Deployment
 
 The project uses GitHub Actions for automated building on Windows. The workflow:
-1. Sets up Python 3.10 on Windows 2019
-2. Installs dependencies from requirements.txt
-3. Uses PyInstaller to create a single executable
-4. Outputs py-scrm.exe as the final artifact
+1. Installs uv package manager
+2. Sets up Python 3.10 using uv
+3. Installs dependencies using uv sync --dev
+4. Uses PyInstaller via uv run to create a single executable
+5. Outputs py-scrm.exe as the final artifact
 
 ## File Structure
 
@@ -67,7 +76,7 @@ The project uses GitHub Actions for automated building on Windows. The workflow:
 /
 ├── main.py           # Main GUI application entry point
 ├── cfg.py            # Logging configuration
-├── requirements.txt  # Python dependencies (pyside6, loguru)
+├── pyproject.toml    # Project configuration and dependencies (pyside6, loguru)
 ├── README.md         # Project description (Chinese)
 └── .github/workflows/package.yml  # CI/CD pipeline
 ```
