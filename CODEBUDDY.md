@@ -33,7 +33,7 @@ python main.py
 ### Building
 ```bash
 # Build Windows executable (as done in CI)
-uv run pyinstaller --onefile --noconsole main.py
+uv run pyinstaller main.spec
 
 # The executable will be created in dist/main.exe
 # Rename to py-scrm.exe for distribution
@@ -43,15 +43,18 @@ uv run pyinstaller --onefile --noconsole main.py
 
 ### Main Components
 
-- **main.py**: Entry point containing the PySide6 GUI application with a simple window layout, background threading for periodic tasks, and application lifecycle management
+- **main.py**: Entry point that initializes logging and creates the application manager
+- **app_manager.py**: Application lifecycle management, handles QApplication setup, background tasks, and graceful shutdown
+- **scrm_dialog.py**: Custom QDialog with red border (2px, #FF0000), frameless window that stays on top
 - **cfg.py**: Logging configuration module using loguru that sets up both console and rotating file logging with detailed formatting
 
 ### Application Structure
 
-The application follows a simple architecture:
-1. **GUI Layer**: PySide6-based window with basic layout (QVBoxLayout, QLabel, QPushButton)
-2. **Threading**: Background thread runs periodic tasks every 5 seconds with proper event-based shutdown
-3. **Logging**: Comprehensive logging using loguru to both console and rotating log files (run.log, max 20MB, 5 backups)
+The application follows a modular architecture:
+1. **GUI Layer**: Custom QDialog (ScrmDialog) with red border, no title bar, stays on top, supports mouse dragging
+2. **Application Management**: AppManager handles application lifecycle, threading, and cleanup
+3. **Threading**: Background thread runs periodic monitoring tasks every 5 seconds with proper event-based shutdown
+4. **Logging**: Comprehensive logging using loguru to both console and rotating log files (run.log, max 20MB, 5 backups)
 
 ### Key Patterns
 
@@ -74,8 +77,11 @@ The project uses GitHub Actions for automated building on Windows. The workflow:
 
 ```
 /
-├── main.py           # Main GUI application entry point
-├── cfg.py            # Logging configuration
+├── main.py           # Application entry point and initialization
+├── app_manager.py    # Application lifecycle and background task management
+├── scrm_dialog.py    # Custom red-bordered dialog (main UI)
+├── cfg.py            # Logging configuration using loguru
+├── main.spec         # PyInstaller specification file for building
 ├── pyproject.toml    # Project configuration and dependencies (pyside6, loguru)
 ├── README.md         # Project description (Chinese)
 └── .github/workflows/package.yml  # CI/CD pipeline
