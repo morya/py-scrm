@@ -44,21 +44,21 @@ jobs:
         name: py-scrm
         path: dist/py-scrm.exe
 
-  release:
-    needs: build
-    runs-on: windows-latest
+  # release:
+  #   needs: build
+  #   runs-on: windows-latest
 
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v5
-      with:
-        name: py-scrm
+  #   steps:
+  #   - name: Download artifact
+  #     uses: actions/download-artifact@v5
+  #     with:
+  #       name: py-scrm
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v${{ github.run_number }}
-        name: Release v${{ github.run_number }}
-        files: py-scrm.exe
-        draft: false
-        prerelease: false
+  #   - name: Create GitHub Release
+  #     uses: softprops/action-gh-release@v1
+  #     with:
+  #       tag_name: v${{ github.run_number }}
+  #       name: Release v${{ github.run_number }}
+  #       files: py-scrm.exe
+  #       draft: false
+  #       prerelease: false
